@@ -15,6 +15,7 @@ def predict(df):
     if df["Type"].values[0] == "HOUSE":
         df = df.loc[:, ~df.columns.isin(["Type"])]
         return house_model.predict(df)
+    
     elif df["Type"].values[0] ==  "APARTMENT":
-        df = df.loc[:, ~df.columns.isin(["Type"])]
+        df = df.loc[:, ~df.columns.isin(["Type","Surface of the land","Number of facades"])]
         return apt_model.predict(df)
