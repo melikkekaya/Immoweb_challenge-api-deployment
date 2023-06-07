@@ -72,41 +72,26 @@ def boolean_to_num(df, cols):
     
 
 def preprocess(json_data):
-    # print("preprocess json:", json_data)
+    df = pd.DataFrame(json_data,index=[0])
+    df = df.rename(columns={
+        'area' : 'Living area',
+        'property_type' : 'Type',
+        'rooms_number': 'Number of rooms',
+        'zip_code' : 'Zip',
+        'land_area' : 'Surface of the land',
+        'garden' : 'Garden',
+        'garden_area' : 'Garden surface',
+        'equipped_kitchen' : 'Kitchen values',
+        'swimming_pool' : 'Swimming pool',
+        'furnished' : 'Furnished',
+        'open_fire' : 'Open fire',
+        'terrace' : 'Terrace',
+        'terrace_area' : 'Terrace surface',
+        'facades_number': 'Number of facades',
+        'building_state' : 'Building Cond. values'
+    })
 
-    df = pd.DataFrame.from_dict(json_data,orient='index')
-    df.info()
-    df = df.T
-    df = df.set_axis(['Living area', 'Type', 'Number of rooms', 'Zip', 'Surface of the land', 'Garden', 'Garden surface', 'Kitchen values', 'Swimming pool', 'Furnished', 'Open fire', 'Terrace', 'Terrace surface', 'Number of facades', 'Building Cond. values'], axis=1)
-    print(df.columns)
-    print(df.info())
 
-    # df = df.astype({
-    #             "Living area":"float",
-    #             "Number of rooms":"float",
-    #             "Zip":"int",
-    #             "Surface of the land":"float",
-    #             "Garden surface":"float",
-    #             "Terrace surface":"float",
-    #             "Number of facades":"float",
-    #             'Number of rooms':"float"
-                
-
-     
-
-    #             'garden' : 'Garden',
-    #             'garden_area' : 'Garden surface',
-    #             'equipped_kitchen' : 'Kitchen values',
-    #             'swimming_pool' : 'Swimming pool',
-    #             'furnished' : 'Furnished',
-    #             'open_fire' : 'Open fire',
-    #             'terrace' : 'Terrace',
-    #             'terrace_area' : 'Terrace surface',
-    #             'facades_number': 'Number of facades',
-    #             'building_state' : 'Building Cond. values'
-    #             })
-    
-    print(df.info())
     df = handle_garden_terrace(df)
     df['Province'] = df['Zip'].apply(get_province)
  
@@ -129,50 +114,5 @@ def preprocess(json_data):
        'Terrace', 'Terrace surface', 'Garden', 'Garden surface',
        'Kitchen values', 'Building Cond. values',
        'Urban_value']]
-    
-    # print(df.loc[:, ~df.columns.duplicated()])
-    # final_json = df.to_json(df)
-    return df.loc[:, ~df.columns.duplicated()]
-    # return df
 
-# json_data = {
-# "area": 80,
-# "property_type": "HOUSE",
-# "rooms_number" : 4,
-# "zip_code": 1000,
-# "land_area": 180,
-# "garden": 1,
-# "garden_area": 50,
-# "equipped_kitchen": True,
-# "full_address": "dfkgfg",
-# "swimming_pool": 0,
-# "furnished": False,
-# "open_fire": 0,
-# "terrace": 0,
-# "terrace_area": 0,
-# "facades_number": 4,
-# "building_state": "NEW"
-# }
-
-# print(preprocess(json_data))
-
-
-# df= old_df.copy()
-    
-    # df = df.rename(columns={
-    #     'area' : 'Living area',
-    #     'property_type' : 'Type',
-    #     'rooms_number': 'Number of rooms',
-    #     'zip_code' : 'Zip',
-    #     'land_area' : 'Surface of the land',
-    #     'garden' : 'Garden',
-    #     'garden_area' : 'Garden surface',
-    #     'equipped_kitchen' : 'Kitchen values',
-    #     'swimming_pool' : 'Swimming pool',
-    #     'furnished' : 'Furnished',
-    #     'open_fire' : 'Open fire',
-    #     'terrace' : 'Terrace',
-    #     'terrace_area' : 'Terrace surface',
-    #     'facades_number': 'Number of facades',
-    #     'building_state' : 'Building Cond. values'
-    # })
+    return df

@@ -1,5 +1,5 @@
 from typing import Union, Optional, Literal
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from fastapi import FastAPI
 from preprocessing.cleaning_data import preprocess
 from predict.prediction import predict
@@ -13,7 +13,7 @@ class Input(BaseModel):
     area: int
     property_type: Literal ["APARTMENT", "HOUSE"]
     rooms_number: int
-    zip_code: int
+    zip_code: int = Field (ge=1000, le=9999)
     land_area: int | None = None
     garden : bool | None = None
     garden_area : int | None = None
@@ -30,35 +30,18 @@ class Input(BaseModel):
 async def read_root():
     return "Alive"
 
-json_data = {
-"area": 80,
-"property_type": "HOUSE",
-"rooms_number" : 4,
-"zip_code": 1000,
-"land_area": 180,
-"garden": True,
-"garden_area": 50,
-"equipped_kitchen": True,
-"swimming_pool": 0,
-"furnished": False,
-"open_fire": 0,
-"terrace": 0,
-"terrace_area": 0,
-"facades_number": 4,
-"building_state": "NEW"
-}
+@app.get("/predict")
+async def data_format():
+    return ("""Required informaiton: area: int, property_type:[APARTMENT,HOUSE], 
+    rooms_number: int, zip_code: int,land_area: Optional [int], garden : Optional [bool],
+    garden_area : Optional [int], equipped_kitchen: Optional [bool], swimming_pool: Optional [bool],
+    furnished: Optional [bool], open_fire: Optional [bool], terrace: Optional [bool],
+    terrace_area: Optional [int],  facades_number: Optional [int], building_state: [NEW, GOOD,TO RENOVATE,JUST RENOVATED,TO REBUILD]""")
 
-@app.post("/predict")
+
+@app.post("/predict") 
 def send_prediction(item: Input):
-
-    json_compatible_item_data = jsonable_encoder(item)
-    # print ("item type: ", type(item))
-    # print("json_compatible_item_data: " , type(json_compatible_item_data))
-    df = preprocess(json_compatible_item_data)
-  
-  
-    # df = preprocess(item)
+    item_data = jsonable_encoder(item)
+    df = preprocess(item_data)
     result = predict(df)
-    return {"result": result[0]}
-
-# print(send_prediction(json_data))
+    return result

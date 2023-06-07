@@ -14,8 +14,13 @@ with open("./model/model_apt.sav", 'rb') as file:
 def predict(df):
     if df["Type"].values[0] == "HOUSE":
         df = df.loc[:, ~df.columns.isin(["Type"])]
-        return house_model.predict(df)
+        result = house_model.predict(df)
+        return {"prediction": float(result)}
     
-    elif df["Type"].values[0] ==  "APARTMENT":
+    elif df["Type"].values[0] == "APARTMENT":
         df = df.loc[:, ~df.columns.isin(["Type","Surface of the land","Number of facades"])]
-        return apt_model.predict(df)
+        result = apt_model.predict(df)
+        return {"prediction": float(result)}
+    
+    else: 
+        return "problem occured on prediction"
