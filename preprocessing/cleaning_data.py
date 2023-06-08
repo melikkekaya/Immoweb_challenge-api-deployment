@@ -21,27 +21,27 @@ def handle_garden_terrace(df):
 
 def get_province(zip_code):
     if 1000 <= zip_code <= 1299:
-        return 'Brussels Capital Region'
+        return 1
     elif 1300 <= zip_code <= 1499:
-        return 'Walloon Brabant'
+        return 2
     elif 1500 <= zip_code <= 1999 or 3000 <= zip_code <= 3499:
-        return 'Flemish Brabant'
+        return 3
     elif 2000 <= zip_code <= 2999:
-        return 'Antwerp'
+        return 4
     elif 3500 <= zip_code <= 3999:
-        return 'Limburg'
+        return 5
     elif 4000 <= zip_code <= 4999:
-        return 'Liège'
+        return 6
     elif 5000 <= zip_code <= 5999:
-        return 'Namur'
+        return 7
     elif 6000 <= zip_code <= 6599 or 7000 <= zip_code <= 7999:
-        return 'Hainaut'
+        return 8
     elif 6600 <= zip_code <= 6999:
-        return 'Luxembourg'
+        return 9
     elif 8000 <= zip_code <= 8999:
-        return 'West Flanders'
+        return 10
     elif 9000 <= zip_code <= 9999:
-        return 'East Flanders'
+        return 11
     else:
         return 'Unknown'
 
@@ -113,6 +113,6 @@ def preprocess(json_data):
        'Swimming pool', 'Furnished', 'Open fire',
        'Terrace', 'Terrace surface', 'Garden', 'Garden surface',
        'Kitchen values', 'Building Cond. values',
-       'Urban_value']]
+       'Urban_value','Province']]
 
     return df
