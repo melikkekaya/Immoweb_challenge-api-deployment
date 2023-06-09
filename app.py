@@ -1,13 +1,16 @@
 from typing import Union, Optional, Literal
 from pydantic import BaseModel, Field
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from preprocessing.cleaning_data import preprocess
 from predict.prediction import predict
 import pandas as pd
+import os
 
-from fastapi.encoders import jsonable_encoder
 
-app = FastAPI()
+PORT = os.environ.get("PORT", 8000)
+
+app = FastAPI(port=PORT)
 
 class Input(BaseModel):
     area: int
